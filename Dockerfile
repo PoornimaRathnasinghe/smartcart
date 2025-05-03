@@ -25,19 +25,17 @@ WORKDIR /app
 COPY . .
 
 # Install PHP dependencies
-RUN php -m && composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader
 
-# Install Node dependencies and build assets
-RUN npm install && npm run prod
+# Install Node dependencies and build assets (with legacy peer deps)
+RUN npm install --legacy-peer-deps && npm run build
 
 # Production stage
 FROM php:8.2-fpm
 
 WORKDIR /var/www/html
 
-COPY --from=build /app ./
-
-# Install PHP extensions in production image too
+# Install system dependencies and PHP extensions in production image too
 RUN apt-get update && \
     apt-get install -y \
         libfreetype6-dev \
@@ -46,6 +44,9 @@ RUN apt-get update && \
         libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd exif zip pdo pdo_mysql
+
+# Copy built application from build stage
+COPY --from=build /app ./
 
 EXPOSE 8000
 
