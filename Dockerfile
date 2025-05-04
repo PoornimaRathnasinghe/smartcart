@@ -22,6 +22,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /app
 COPY . /app
 
+# Debug: Search for any reference to IdeHelperServiceProvider
+RUN grep -r IdeHelperServiceProvider . || echo "No references found"
+
 # Remove all Laravel cache files before composer install
 RUN rm -rf bootstrap/cache/*
 
