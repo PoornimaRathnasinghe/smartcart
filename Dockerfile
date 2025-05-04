@@ -16,6 +16,9 @@ RUN apt-get update && \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd exif zip pdo pdo_mysql
 
+# Install Composer (add this line)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 WORKDIR /app
 COPY . /app
 
