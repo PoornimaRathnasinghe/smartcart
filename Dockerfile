@@ -25,6 +25,8 @@ COPY . /app
 # Install PHP dependencies without dev dependencies (recommended for production)
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan config:clear
+
 # Build frontend assets
 RUN npm cache clean --force && npm install --legacy-peer-deps && npm run prod
 
