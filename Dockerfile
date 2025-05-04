@@ -23,7 +23,7 @@ COPY . /app
 RUN composer install --no-dev --optimize-autoloader
 
 # Build frontend assets
-RUN npm install --legacy-peer-deps && npm run prod
+RUN npm cache clean --force && npm install --legacy-peer-deps && npm run prod
 
 # Production stage
 FROM php:8.2-fpm
