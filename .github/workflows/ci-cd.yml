@@ -18,7 +18,8 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker image
-        run: docker build -t smartcart-app .
+        run: |
+          docker build --build-arg APP_ENV=testing -t smartcart-app .
 
       - name: Run Laravel tests
         run: |
