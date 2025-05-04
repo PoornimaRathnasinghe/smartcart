@@ -16,13 +16,8 @@ RUN apt-get update && \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd exif zip pdo pdo_mysql
 
-# Install Composer (after extensions are available)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-WORKDIR /
-
-# Copy application code
-COPY . .
+WORKDIR /app
+COPY . /app
 
 # Install PHP dependencies without dev dependencies (recommended for production)
 RUN composer install --no-dev --optimize-autoloader
@@ -33,7 +28,7 @@ RUN npm install --legacy-peer-deps && npm run prod
 # Production stage
 FROM php:8.2-fpm
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 # Install system dependencies and PHP extensions in production image too
 RUN apt-get update && \
@@ -45,7 +40,6 @@ RUN apt-get update && \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd exif zip pdo pdo_mysql
 
-# Copy built application from build stage
 COPY --from=build /app ./
 
 EXPOSE 8000
