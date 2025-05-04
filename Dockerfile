@@ -19,7 +19,7 @@ RUN apt-get update && \
 # Install Composer (after extensions are available)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /app
+WORKDIR /
 
 # Copy application code
 COPY . .
