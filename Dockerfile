@@ -24,10 +24,10 @@ WORKDIR /app
 # Copy application code
 COPY . .
 
-# Install PHP dependencies
+# Install PHP dependencies without dev dependencies (recommended for production)
 RUN composer install --no-dev --optimize-autoloader
 
-# Install Node dependencies and build assets (with legacy peer deps)
+# Build frontend assets
 RUN npm install --legacy-peer-deps && npm run build
 
 # Production stage
